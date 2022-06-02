@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选择图片并且识别颜色</title>
+    <style>
+        html,body{
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            text-decoration: none;
+            list-style: decimal-leading-zero;
+            width: 200px;
+            line-height: 50px;
+            text-align: center;
+            margin: 30px;
+            border: red dashed 1px;
+            font-size:12px;
+            float: left;
+            cursor: pointer;
+        }
+        .cover{
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: -3;
+            opacity: 0;
+        }
+        .cover.active{
+            z-index: 3;
+            opacity: 1;
+
+        }
+        .content{
+            display: flex;
+            height: 100%;
+        }
+        .canvas{
+            flex: 1;
+        }
+        .colors{
+            flex: 1;
+            height: 100%;
+            overflow: auto;
+            position: relative;
+            padding: 30px 0px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" onchange="getPic(this)">
+    <span id="colorNum"></span>
+
+    <div class="content">
+        <div class="canvas">
+            <canvas id="picCanvas"></canvas>
+        </div>
+        <div class="colors">
+            <ul id="colors"></ul>
+        </div>
+    </div>
+    
+    
+    
+    <div id="cover" class="cover">
+        处理中
+    </div>
+</body>
+<script>
+var colors={}//统计颜色出现的次数
+var likeColors={}//相似的颜色集合
+var file=''
+var fillColor="white"
+
+var colorNum=0
+
+function cover(show){
+    if(show){
+        document.getElementById("cover").classList.add("active")
+    }else{
+        document.getElementById("cover").classList.remove("active")
+    }
+   
+}
+function getPic(r){
+    console.log(r.files)
+        file=r;
+        colors={};
+        var reader = new FileReader();
+        var img=new Image();
+        var fileObj={}
+        fileObj=r.files[0]
+        reader.readAsDataURL(r.files[0]);
+        reader.onload=(e)=>{
+            img.src=e.target.result;
+            img.onload=()=>{
+                var canvas = document.getElementById('picCanvas');
+                canvas.width=img.width;
+                canvas.height=img.height;
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(img,0,0,img.width,img.height);
+                getColor(img.width,img.height,ctx)
+                // addColorDOM(colors)   
+            }
+        }
+}
+function getColor(w,h,ctx){
+    var sumR = 0;
+    var sumG = 0;
+    var sumB = 0;
+    var arr = ctx.getImageData(0,0,w,h).data;
+
+        for(var j=0;j<h*w/4;j++){
+                var index = j*4
+                var R = arr[index]
+                var G = arr[index+1]
+                var B = arr[index+2]
+                var A = arr[index+3]
+
+                sumR += R;
+                sumG += G;
+                sumB += B;
+
+            }
+    var avR = sumR/w/h
+    var avG = sumG/w/h
+    var avB = sumB/w/h
+    cover(false)
+    document.getElementById('colors').innerHTML="avR:"+avR+"  avG:" + avG + "  avB:"+ avB
+
+}
+
+function addColorDOM(o,nosort){
+    document.getElementById('colors').innerHTML=""
+    if(nosort){
+        var arr=o
+    }else{
+        var arr=sort(o).reverse()
+    }
+    
+    var d=document.createDocumentFragment();
+    var num=0;
+    var liDOM;
+    document.getElementById("colorNum").innerHTML="颜色总数量"+arr.length
+    var index=0;
+    
+    var time=setInterval(()=>{
+        liDOM=document.createElement("li")
+        liDOM.textContent ="颜色  "+arr[index].color+"    共"+arr[index].num+"次";
+        liDOM.setAttribute('data-color',arr[index].color)
+        liDOM.style.background="rgba("+arr[index].color+")"
+        d.append(liDOM);    
+        document.getElementById("colors").append(d);
+        index+=1;
+        if(index>=arr.length){
+            clearInterval(time)
+        }
+    },100)
+
+}
+function checkColor(arr){
+    //检查颜色是否跟已经存在的颜色存在相似的情况 有相似值返回相似值 没有相似值返回原值
+    for(var i in colors){
+        if(colorIsLike(i,arr.toString())<30){
+            if(!likeColors[i]){
+                likeColors[i]={
+                    [arr.toString()]:{
+                        color:arr.toString(),
+                    },
+                    [i]:{
+                        color:i,
+                    }
+                    
+                }
+                
+            }else{
+                likeColors[i][arr.toString()]={
+                      color:arr.toString(),
+                }
+            }
+            return i;
+        }
+        
+        
+    }
+    return arr.toString()
+    
+} 
+
+function colorIsLike(c1,c2){
+    //判断颜色是否相似
+    c1=c1.split(",")
+    c2=c2.split(",")
+    r3 =( c1[0]-c2[0]) / 256
+    g3 = (c1[1]-c2[1]) / 256
+    b3 = (c1[2]-c2[2]) / 256
+    diff = Math.sqrt(r3 * r3 + g3 * g3 + b3 * b3)
+    return diff*100 //值越小 越相似
+}
+function sort(obj,arr){
+    //排序
+    // var arr=[]
+    if(!arr){
+        arr=[]
+        for(var i in obj){
+            arr.push({num:obj[i].num,color:i})
+        }
+    }
+    for(var i=0;i<arr.length-1;i++){
+        for(var j=0;j<arr.length-i-1;j++){
+            if(arr[j].num>arr[j+1].num){
+                var temp=arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp;
+            }
+        }
+    }
+    return arr
+}
+    
+
+</script>
+</html>
