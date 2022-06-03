@@ -31,6 +31,7 @@ const App = () => {
   const { avR, avG, avB } = data;
 
   const onPreview = async (file) => {
+    console.log(file)
     let src = file.url;
     if (!src) {
       src = await new Promise((resolve) => {
@@ -68,7 +69,7 @@ const App = () => {
 
   return (
     <>
-      <ImgCrop rotate shape={"round"} minZoom={1} maxZoom={20}>
+      <ImgCrop rotate shape={"round"} minZoom={1} maxZoom={50}>
         <Upload
           listType="picture-card"
           fileList={fileList}
@@ -82,7 +83,7 @@ const App = () => {
         </Upload>
       </ImgCrop>
       <div>
-        {"avR: " + (avR || " ") + "   ,avG: " + (avG || " ") + "   ,avB: " + (avB || " ")}
+        {"avR: " + (avR || "0") + "   ,avG: " + (avG || "0") + "   ,avB: " + (avB || "0")}
       </div>
     </>
   );
