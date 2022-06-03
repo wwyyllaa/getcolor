@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Upload } from "antd";
 import ImgCrop from "antd-img-crop";
+import cal_cubic_ik from "./calcu";
+
 const getColor = (w, h, arr) => {
   var sumR = 0;
   var sumG = 0;
@@ -24,14 +26,13 @@ const getColor = (w, h, arr) => {
   return [avR, avG, avB];
 };
 
-const App = () => {
+const App = ({ params, setParams }) => {
   const [fileList, setFileList] = useState([]);
   const [data, setData] = useState({});
-  const [num, setNum] = useState(1);
-  const { avR, avG, avB } = data;
-
+  const { avR, avG, avB, result } = data;
+  const { paramA, paramB, paramC, paramD, paramResult } = params;
   const onPreview = async (file) => {
-    console.log(file)
+    console.log(params);
     let src = file.url;
     if (!src) {
       src = await new Promise((resolve) => {
@@ -49,7 +50,21 @@ const App = () => {
             ctx.drawImage(img, 0, 0, img.width, img.height);
             var arr = ctx.getImageData(0, 0, img.width, img.height).data;
             const [avR, avG, avB] = getColor(img.width, img.height, arr);
-            setData({ avR, avG, avB });
+            const calResult = cal_cubic_ik([
+              paramA,
+              paramB,
+              paramC,
+              paramD - (255 - avB),
+            ]);
+            setParams({ ...params, paramY: avB, paramResult: calResult });
+            setData({
+              avR,
+              avG,
+              avB,
+              result: calResult
+                ?.map((r) => r <= 4.5 && r >= 2.0 && r)
+                ?.filter((r) => r),
+            });
             // resolve(reader.result);
           };
         };
@@ -83,8 +98,14 @@ const App = () => {
         </Upload>
       </ImgCrop>
       <div>
-        {"avR: " + (avR || "0") + "   ,avG: " + (avG || "0") + "   ,avB: " + (avB || "0")}
+        {"avR: " +
+          (avR || "0") +
+          "   ,avG: " +
+          (avG || "0") +
+          "   ,avB: " +
+          (avB || "0")}
       </div>
+      {/* <div>{"result: " + (result || "0")}</div> */}
     </>
   );
 };
