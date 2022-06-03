@@ -27,9 +27,8 @@ export default  () => (
           margin: '16px 0',
         }}
       >
-        <Breadcrumb.Item>Home</Breadcrumb.Item>
-        <Breadcrumb.Item>List</Breadcrumb.Item>
-        <Breadcrumb.Item>App</Breadcrumb.Item>
+        <Breadcrumb.Item>主页</Breadcrumb.Item>
+        <Breadcrumb.Item>图片采集</Breadcrumb.Item>
       </Breadcrumb>
       <PictureColor />
     </Content>
@@ -38,7 +37,7 @@ export default  () => (
         textAlign: 'center',
       }}
     >
-      Ant Design ©2018 Created by Ant UED
+      Designed in 2022
     </Footer>
   </Layout>
 );

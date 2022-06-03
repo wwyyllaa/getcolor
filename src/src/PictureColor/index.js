@@ -12,18 +12,10 @@ const PictureColor = () => {
         display: "flex",
       }}
     >
-      <Card title="Card" size="small">
+      <Card title="图片上传" size="large">
         <CropPic />
       </Card>
-      <Card title="Card" size="small">
-        {/* <p>{avR}</p>
-        <p>{avG}</p>
-        <p>{avB}</p> */}
-      </Card>
-      <Card title="Card" size="small">
-        <p>Card content</p>
-        <p>Card content</p>
-      </Card>
+
     </Space>
   );
 };

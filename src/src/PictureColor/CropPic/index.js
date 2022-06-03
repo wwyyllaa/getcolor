@@ -17,9 +17,9 @@ const getColor = (w, h, arr) => {
     sumG += G;
     sumB += B;
   }
-  var avR = sumR / w / h;
-  var avG = sumG / w / h;
-  var avB = sumB / w / h;
+  var avR = (sumR / w / h) * 4;
+  var avG = (sumG / w / h) * 4;
+  var avB = (sumB / w / h) * 4;
   console.log(avR, avG, avB);
   return [avR, avG, avB];
 };
@@ -27,8 +27,8 @@ const getColor = (w, h, arr) => {
 const App = () => {
   const [fileList, setFileList] = useState([]);
   const [data, setData] = useState({});
+  const [num, setNum] = useState(1);
   const { avR, avG, avB } = data;
-
 
   const onPreview = async (file) => {
     let src = file.url;
@@ -47,9 +47,8 @@ const App = () => {
             var ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0, img.width, img.height);
             var arr = ctx.getImageData(0, 0, img.width, img.height).data;
-            console.log(arr);
             const [avR, avG, avB] = getColor(img.width, img.height, arr);
-            setData({ avR, avG, avB })
+            setData({ avR, avG, avB });
             // resolve(reader.result);
           };
         };
@@ -60,27 +59,31 @@ const App = () => {
     // const imgWindow = window.open(src);
     // imgWindow?.document.write(image.outerHTML);
   };
-  const onChange = ({ fileList: newFileList }) => {
-    if(newFileList[0] && newFileList[0]['status'] !== 'uploadingne'){
-      onPreview(newFileList[0])
+  const onChange = ({ fileList: newFileList, file }) => {
+    if (file && file["status"] !== "uploadingne") {
+      onPreview(file);
     }
     setFileList(newFileList);
   };
 
   return (
     <>
-      <ImgCrop rotate shape={"round"}>
+      <ImgCrop rotate shape={"round"} minZoom={1} maxZoom={20}>
         <Upload
           listType="picture-card"
           fileList={fileList}
           onChange={onChange}
           onPreview={onPreview}
-          onload={(e)=>{console.log(e)}}
+          onload={(e) => {
+            console.log(e);
+          }}
         >
           {fileList.length < 5 && "+ Upload"}
         </Upload>
       </ImgCrop>
-      <div>{('avR: '+avR+'   ,avG: '+ avG+'   ,avB: '+avB)}</div>
+      <div>
+        {"avR: " + (avR || " ") + "   ,avG: " + (avG || " ") + "   ,avB: " + (avB || " ")}
+      </div>
     </>
   );
 };
