@@ -55,15 +55,15 @@ const App = ({ params, setParams }) => {
               paramB,
               paramC,
               paramD - (255 - avB),
-            ]);
+            ])
+              ?.map((r) => r <= 4.5 && r >= 2.0 && r)
+              ?.filter((r) => r)[0] ||0;
             setParams({ ...params, paramY: avB, paramResult: calResult });
             setData({
               avR,
               avG,
               avB,
               result: calResult
-                ?.map((r) => r <= 4.5 && r >= 2.0 && r)
-                ?.filter((r) => r),
             });
             // resolve(reader.result);
           };
