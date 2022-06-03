@@ -69,7 +69,7 @@ const App = () => {
 
   return (
     <>
-      <ImgCrop rotate shape={"round"} minZoom={1} maxZoom={50}>
+      <ImgCrop rotate shape={"round"} minZoom={1} maxZoom={100}>
         <Upload
           listType="picture-card"
           fileList={fileList}
