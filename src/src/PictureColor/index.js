@@ -115,10 +115,7 @@ const PictureColor = () => {
           >
             X
           </Col>
-          <Col
-            span={2}
-            style={{ paddingTop: "9px" }}
-          >
+          <Col span={2} style={{ paddingTop: "9px" }}>
             <PauseOutlined rotate={90} />
           </Col>
           <Col
@@ -141,7 +138,7 @@ const PictureColor = () => {
             xl={2}
             style={{ paddingTop: "2px", fontSize: 22 }}
           >
-            logX
+            10^X
           </Col>
           <Col span={2} style={{ paddingTop: "9px" }}>
             <PauseOutlined rotate={90} />
@@ -155,7 +152,7 @@ const PictureColor = () => {
             style={{ paddingTop: "2px", fontSize: 22 }}
           >
             {(typeof Math.log(paramResult) === "number" &&
-              Math.log(paramResult).toFixed(6)) ||
+              Math.pow(10, paramResult).toFixed(6)) ||
               "0"}
           </Col>
         </Row>
