@@ -35,14 +35,14 @@ export default () => {
         }}
       >
         {key === "1" && <PictureColor aspect={1} shape={"round"} />}
-        {key === "2" && <AllPictureColor aspect={2/3} shape={"rect"} />}
+        {key === "2" && <AllPictureColor aspect={714/1087} shape={"rect"} />}
       </Content>
       <Footer
         style={{
           textAlign: "center",
         }}
       >
-        Designed in 2022 v3.0.2
+        Designed in 2022 v3.1.0
       </Footer>
     </Layout>
   );

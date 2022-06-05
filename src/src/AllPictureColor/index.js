@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Space, Card, Input, Row, Col, Divider } from "antd";
+import { Space, Card, Input, Row, Col, Divider, Table } from "antd";
 import { PlusOutlined, PauseOutlined } from "@ant-design/icons";
 import CropPic from "./CropPic";
+import columns from "./columns";
+const XNUM = 8;
+const YNUM = 12;
 
-const PictureColor = ({aspect=1, shape='round'}) => {
+const PictureColor = ({ aspect = 1, shape = "round" }) => {
   const [params, setParams] = useState({
     paramA: -13.6,
     paramB: 138.1,
@@ -14,6 +17,12 @@ const PictureColor = ({aspect=1, shape='round'}) => {
   });
   const { paramA, paramB, paramC, paramD, paramY, paramResult } = params;
   const commonStyle = { marginTop: 3 };
+  const [tableData, setTableData] = useState(
+    new Array(XNUM * YNUM).fill({}).map((r, i) => {
+      return { key: i };
+    })
+  );
+  console.log(tableData);
   return (
     <Space
       direction="vertical"
@@ -23,8 +32,23 @@ const PictureColor = ({aspect=1, shape='round'}) => {
       }}
     >
       <Card title="图片上传" size="large">
-        <CropPic params={params} setParams={setParams} aspect={aspect} shape={shape} />
+        <CropPic
+          params={params}
+          setParams={setParams}
+          tableData={tableData}
+          setTableData={setTableData}
+          aspect={aspect}
+          shape={shape}
+        />
       </Card>
+      <Card title="计算值列表" size="large">
+        <Table columns={columns} dataSource={tableData} scroll={{ x: 1500 }} />
+      </Card>
+
+      <Card title="切割图片" size="large" style={{overflow:'scroll'}}>
+        <canvas id="cropPicture"></canvas>
+      </Card>
+
       <Card title="参数设置" size="large">
         <Input.Group size="large">
           <Row gutter={8}>
@@ -99,63 +123,11 @@ const PictureColor = ({aspect=1, shape='round'}) => {
               xl={4}
               style={{ paddingTop: "2px", fontSize: 22, ...commonStyle }}
             >
-              255 - {paramY.toFixed(3)}
+              255 - avB
             </Col>
           </Row>
         </Input.Group>
         <Divider />
-        <Row style={{ paddingTop: "20px" }}>
-          <Col
-            xs={6}
-            sm={5}
-            md={4}
-            lg={3}
-            xl={2}
-            style={{ paddingTop: "2px", fontSize: 22, ...commonStyle }}
-          >
-            X
-          </Col>
-          <Col span={2} style={{ paddingTop: "9px" }}>
-            <PauseOutlined rotate={90} />
-          </Col>
-          <Col
-            xs={8}
-            sm={7}
-            md={6}
-            lg={5}
-            xl={3}
-            style={{ paddingTop: "2px", fontSize: 22 }}
-          >
-            {(typeof paramResult === "number" && paramResult.toFixed(6)) || "0"}
-          </Col>
-        </Row>
-        <Row style={{ paddingTop: "20px" }}>
-          <Col
-            xs={6}
-            sm={5}
-            md={4}
-            lg={3}
-            xl={2}
-            style={{ paddingTop: "2px", fontSize: 22 }}
-          >
-            10^X
-          </Col>
-          <Col span={2} style={{ paddingTop: "9px" }}>
-            <PauseOutlined rotate={90} />
-          </Col>
-          <Col
-            xs={9}
-            sm={7}
-            md={6}
-            lg={5}
-            xl={3}
-            style={{ paddingTop: "2px", fontSize: 22 }}
-          >
-            {(typeof Math.log(paramResult) === "number" &&
-              Math.pow(10, paramResult).toFixed(6)) ||
-              "0"}
-          </Col>
-        </Row>
       </Card>
     </Space>
   );

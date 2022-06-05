@@ -22,7 +22,6 @@
         B = b * c - 9 * a * d,
         C = c ** 2 - 3 * b * d,
         delta = B ** 2 - 4 * A * C;  //总判别式
-        console.log('delta',delta)
     
     // 一个三重实根
     if (isZero(A) && isZero(B)){
