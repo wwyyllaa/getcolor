@@ -4,7 +4,7 @@ import ImgCrop from "antd-img-crop";
 import cal_cubic_ik from "../../utils/calcu";
 const B = 22 / 714;
 const D = 35 / 714;
-const TESTR = 18;
+const TESTR = 15;
 const XNUM = 8;
 const YNUM = 12;
 
@@ -99,6 +99,7 @@ const App = ({
 
         reader.onload = (e) => {
           img.src = e.target.result;
+          console.log(img.width, img.height);
           img.onload = () => {
             var canvas = document.getElementById("cropPicture");
             canvas.width = img.width;
@@ -162,7 +163,7 @@ const App = ({
     }
   };
   const onChange = ({ fileList: newFileList, file }) => {
-    if (file && file["status"] !== "uploadingne") {
+    if (file && file["status"] !== "uploading") {
       onPreview(file);
     }
     setFileList(newFileList);
