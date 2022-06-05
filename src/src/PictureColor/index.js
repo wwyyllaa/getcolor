@@ -3,7 +3,13 @@ import { Space, Card, Input, Row, Col, Divider } from "antd";
 import { PlusOutlined, PauseOutlined } from "@ant-design/icons";
 import CropPic from "./CropPic";
 
-const PictureColor = ({aspect=1, shape='round'}) => {
+const PictureColor = ({
+  aspect = 1,
+  shape = "round",
+  unit,
+  divideValue,
+  name,
+}) => {
   const [params, setParams] = useState({
     paramA: -13.6,
     paramB: 138.1,
@@ -22,10 +28,15 @@ const PictureColor = ({aspect=1, shape='round'}) => {
         display: "flex",
       }}
     >
-      <Card title="图片上传" size="large">
-        <CropPic params={params} setParams={setParams} aspect={aspect} shape={shape} />
+      <Card title="Picture" size="large">
+        <CropPic
+          params={params}
+          setParams={setParams}
+          aspect={aspect}
+          shape={shape}
+        />
       </Card>
-      <Card title="参数设置" size="large">
+      <Card title={"Parameter Settings(" + name.split('_')[1] + ")"} size="large">
         <Input.Group size="large">
           <Row gutter={8}>
             <Col xs={12} sm={9} md={7} lg={6} xl={3} style={{ ...commonStyle }}>
@@ -106,16 +117,16 @@ const PictureColor = ({aspect=1, shape='round'}) => {
         <Divider />
         <Row style={{ paddingTop: "20px" }}>
           <Col
-            xs={6}
-            sm={5}
-            md={4}
-            lg={3}
-            xl={2}
-            style={{ paddingTop: "2px", fontSize: 22, ...commonStyle }}
+            xs={9}
+            sm={8}
+            md={6}
+            lg={5}
+            xl={3}
+            style={{ paddingTop: "2px", fontSize: 16, ...commonStyle }}
           >
-            X
+            Intensity
           </Col>
-          <Col span={2} style={{ paddingTop: "9px" }}>
+          <Col span={2} style={{ paddingTop: "6px" }}>
             <PauseOutlined rotate={90} />
           </Col>
           <Col
@@ -124,23 +135,23 @@ const PictureColor = ({aspect=1, shape='round'}) => {
             md={6}
             lg={5}
             xl={3}
-            style={{ paddingTop: "2px", fontSize: 22 }}
+            style={{ paddingTop: "2px", fontSize: 16 }}
           >
-            {(typeof paramResult === "number" && paramResult.toFixed(6)) || "0"}
+            {paramY && (255 - paramY).toFixed(6)}
           </Col>
         </Row>
         <Row style={{ paddingTop: "20px" }}>
           <Col
-            xs={6}
-            sm={5}
-            md={4}
-            lg={3}
-            xl={2}
-            style={{ paddingTop: "2px", fontSize: 22 }}
+            xs={9}
+            sm={8}
+            md={6}
+            lg={5}
+            xl={3}
+            style={{ paddingTop: "2px", fontSize: 16 }}
           >
-            10^X
+            Concentration
           </Col>
-          <Col span={2} style={{ paddingTop: "9px" }}>
+          <Col span={2} style={{ paddingTop: "6px" }}>
             <PauseOutlined rotate={90} />
           </Col>
           <Col
@@ -149,11 +160,11 @@ const PictureColor = ({aspect=1, shape='round'}) => {
             md={6}
             lg={5}
             xl={3}
-            style={{ paddingTop: "2px", fontSize: 22 }}
+            style={{ paddingTop: "2px", fontSize: 16 }}
           >
-            {(typeof Math.log(paramResult) === "number" &&
-              Math.pow(10, paramResult).toFixed(6)) ||
-              "0"}
+            {(typeof Math.pow(paramResult) === "number" &&
+              Math.pow(10, paramResult).toFixed(6)) / divideValue || "0"}
+            {unit}
           </Col>
         </Row>
       </Card>

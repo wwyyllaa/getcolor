@@ -1,12 +1,44 @@
 import React, { useState } from "react";
-import { Space, Card, Input, Row, Col, Divider, Table } from "antd";
+import { Space, Card, Input, Row, Col, Divider, Table, Button } from "antd";
 import { PlusOutlined, PauseOutlined } from "@ant-design/icons";
 import CropPic from "./CropPic";
 import columns from "./columns";
+import exportText from "../utils/exportText";
 const XNUM = 8;
 const YNUM = 12;
+function getTableDataRectStr(tableData, divideValue) {
+  const arrObj = [];
+  let intensityStr = "";
+  let concentrationStr = "";
+  tableData.map((r) => {
+    arrObj[r.key] = {
+      intensity: 255 - r[2]?.["value"] || 0,
+      concentration: r[2]?.["10^X"] / divideValue || 0,
+    };
+  });
+  for (let j = 0; j < YNUM; j++) {
+    for (let i = 0; i < XNUM; i++) {
+      const index = i + j * XNUM;
+      intensityStr += arrObj[index]["intensity"].toFixed(12);
+      concentrationStr += arrObj[index]["concentration"].toFixed(16);
+      if (i < XNUM - 1) {
+        intensityStr += "\t";
+        concentrationStr += "\t ";
+      }
+    }
+    intensityStr += "\n";
+    concentrationStr += "\n";
+  }
+  return [intensityStr, concentrationStr];
+}
 
-const PictureColor = ({ aspect = 1, shape = "round" }) => {
+const PictureColor = ({
+  aspect = 1,
+  shape = "round",
+  unit,
+  divideValue,
+  name,
+}) => {
   const [params, setParams] = useState({
     paramA: -13.6,
     paramB: 138.1,
@@ -22,7 +54,12 @@ const PictureColor = ({ aspect = 1, shape = "round" }) => {
       return { key: i };
     })
   );
-  console.log(tableData);
+  const [intensityStr, concentrationStr] = getTableDataRectStr(
+    tableData,
+    divideValue
+  );
+  const exportData =
+    "Intensity\n" + intensityStr + "\nConcentration\n" + concentrationStr;
   return (
     <Space
       direction="vertical"
@@ -31,7 +68,7 @@ const PictureColor = ({ aspect = 1, shape = "round" }) => {
         display: "flex",
       }}
     >
-      <Card title="图片上传" size="large">
+      <Card title="Picture" size="large">
         <CropPic
           params={params}
           setParams={setParams}
@@ -41,15 +78,40 @@ const PictureColor = ({ aspect = 1, shape = "round" }) => {
           shape={shape}
         />
       </Card>
-      <Card title="计算值列表" size="large">
-        <Table columns={columns} dataSource={tableData} scroll={{ x: 1500 }} />
-      </Card>
-
-      <Card title="切割图片" size="large" style={{overflow:'scroll'}}>
+      <Card
+        title={"Picture Analyzing(" + name.split("_")[1] + ")"}
+        size="large"
+        style={{ overflow: "scroll" }}
+      >
         <canvas id="cropPicture"></canvas>
       </Card>
+      <Card
+        title={
+          <span>
+            <div>Order Intensity Concentration</div>
+            <Button
+              type={"primary"}
+              size={"small"}
+              onClick={() => {
+                exportText("data.txt", exportData);
+              }}
+            >
+              Export
+            </Button>
+          </span>
+        }
+        size="large"
+      >
+        <Table
+          size={"small"}
+          columns={columns(unit, divideValue)}
+          dataSource={tableData}
+          pagination={false}
+          scroll={{ y: 800 }}
+        />
+      </Card>
 
-      <Card title="参数设置" size="large">
+      <Card title="Parameter Settings" size="large">
         <Input.Group size="large">
           <Row gutter={8}>
             <Col xs={12} sm={9} md={7} lg={6} xl={3} style={{ ...commonStyle }}>

@@ -66,10 +66,6 @@ const App = ({ params, setParams, aspect = 1, shape = "round" }) => {
         };
       });
     }
-    // const image = new Image();
-    // image.src = src;
-    // const imgWindow = window.open(src);
-    // imgWindow?.document.write(image.outerHTML);
   };
   const onChange = ({ fileList: newFileList, file }) => {
     if (file && file["status"] !== "uploadingne") {

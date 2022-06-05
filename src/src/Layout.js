@@ -5,7 +5,15 @@ import AllPictureColor from "./AllPictureColor";
 const { Header, Content, Footer } = Layout;
 
 export default () => {
-  const [key, setKey] = useState("2");
+  const [key, setKey] = useState("2_H2O2");
+  const defaultSingleProps = {
+    aspect: 1,
+    shape:'round',
+  }
+  const defaultMultiProps = {
+    aspect: 714 / 1087,
+    shape:'rect',
+  }
   return (
     <Layout className="layout">
       <Header>
@@ -18,10 +26,62 @@ export default () => {
             {
               key: "1",
               label: `单通道采集`,
+              children: [
+                {
+                  key: "1_H2O2",
+                  label: (
+                    <span>
+                      H<sub>2</sub>O<sub>2</sub>
+                    </span>
+                  ),
+                },
+                {
+                  key: "1_Glucose",
+                  label: (
+                    <span>
+                      1_Glucose
+                    </span>
+                  ),
+                },
+                {
+                  key: "1_Uric acid",
+                  label: (
+                    <span>
+                      Uric acid
+                    </span>
+                  ),
+                },
+              ],
             },
             {
               key: "2",
               label: `多通道采集`,
+              children: [
+                {
+                  key: "2_H2O2",
+                  label: (
+                    <span>
+                      H<sub>2</sub>O<sub>2</sub>
+                    </span>
+                  ),
+                },
+                {
+                  key: "2_Glucose",
+                  label: (
+                    <span>
+                      1_Glucose
+                    </span>
+                  ),
+                },
+                {
+                  key: "2_Uric acid",
+                  label: (
+                    <span>
+                      Uric acid
+                    </span>
+                  ),
+                },
+              ],
             },
           ]}
           onClick={(e) => {
@@ -34,15 +94,19 @@ export default () => {
           padding: "0 50px",
         }}
       >
-        {key === "1" && <PictureColor aspect={1} shape={"round"} />}
-        {key === "2" && <AllPictureColor aspect={714/1087} shape={"rect"} />}
+        {key === "1_H2O2" && <PictureColor name={"1_H2O2"} {...defaultSingleProps} unit={'μM'} divideValue={1} />}
+        {key === "1_Glucose" && <PictureColor name={"1_Glucose"}  {...defaultSingleProps} unit={'mM'} divideValue={1000} />}
+        {key === "1_Uric acid" && <PictureColor name={"1_Uric acid"}  {...defaultSingleProps} unit={'μM'} divideValue={1} />}
+        {key === "2_H2O2" && <AllPictureColor name={"2_H2O2"}  {...defaultMultiProps} unit={'μM'} divideValue={1} />}
+        {key === "2_Glucose" && <AllPictureColor name={"2_Glucose"}  {...defaultMultiProps} unit={'mM'} divideValue={1000} />}
+        {key === "2_Uric acid" && <AllPictureColor name={"2_Uric acid"}  {...defaultMultiProps} unit={'μM'} divideValue={1}/>}
       </Content>
       <Footer
         style={{
           textAlign: "center",
         }}
       >
-        Designed in 2022 v3.1.2
+        Designed in 2022 v3.2.2
       </Footer>
     </Layout>
   );
