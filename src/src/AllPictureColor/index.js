@@ -6,7 +6,7 @@ import columns from "./columns";
 import exportText from "../utils/exportText";
 const XNUM = 8;
 const YNUM = 12;
-function getTableDataRectStr(tableData, divideValue) {
+function getTableDataRectStr(tableData, divideValue, divdeChar = "\t") {
   const arrObj = [];
   let intensityStr = "";
   let concentrationStr = "";
@@ -22,8 +22,8 @@ function getTableDataRectStr(tableData, divideValue) {
       intensityStr += arrObj[index]["intensity"].toFixed(12);
       concentrationStr += arrObj[index]["concentration"].toFixed(16);
       if (i < XNUM - 1) {
-        intensityStr += "\t";
-        concentrationStr += "\t ";
+        intensityStr += divdeChar;
+        concentrationStr += divdeChar;
       }
     }
     intensityStr += "\n";
@@ -54,12 +54,19 @@ const PictureColor = ({
       return { key: i };
     })
   );
-  const [intensityStr, concentrationStr] = getTableDataRectStr(
+  const [intensityStrTxt, concentrationStrTxt] = getTableDataRectStr(
     tableData,
     divideValue
   );
-  const exportData =
-    "Intensity\n" + intensityStr + "\nConcentration\n" + concentrationStr;
+  const [intensityStrCSV, concentrationStrCSV] = getTableDataRectStr(
+    tableData,
+    divideValue,
+    ","
+  );
+  const exportDataTxt =
+    "Intensity\n" + intensityStrTxt + "\nConcentration\n" + concentrationStrTxt;
+  const exportDataCSV =
+    "Intensity\n" + intensityStrCSV + "\nConcentration\n" + concentrationStrCSV;
   return (
     <Space
       direction="vertical"
@@ -93,10 +100,20 @@ const PictureColor = ({
               type={"primary"}
               size={"small"}
               onClick={() => {
-                exportText("data.txt", exportData);
+                exportText("data.txt", exportDataTxt);
               }}
             >
-              Export
+              ExportTxt
+            </Button>
+            <Button
+              style={{ marginLeft: 10 }}
+              type={"primary"}
+              size={"small"}
+              onClick={() => {
+                exportText("data.csv", exportDataCSV);
+              }}
+            >
+              ExportCSV
             </Button>
           </span>
         }

@@ -106,7 +106,7 @@ export default () => {
           textAlign: "center",
         }}
       >
-        Designed in 2022 v3.2.2
+        Designed in 2022 v3.2.3
       </Footer>
     </Layout>
   );
