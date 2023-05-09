@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Upload } from "antd";
 import ImgCrop from "antd-img-crop";
 import cal_cubic_ik from "../../utils/calcu";
+import cal_x from "../../utils/cal_x";
 const B = 22 / 714;
 const D = 35 / 714;
 const TESTR = 15;
@@ -134,16 +135,11 @@ const App = ({
                 r[colorIndex]["value"] = avColor;
                 r[colorIndex]["arr"] = colors;
                 const calResult =
-                  cal_cubic_ik([
-                    paramA,
-                    paramB,
-                    paramC,
-                    paramD - (255 - avColor),
-                  ])
-                    ?.map((r) => r <= 4.5 && r >= 2.0 && r)
-                    ?.filter((r) => r)[0] || 0;
-                r[colorIndex]["X"] = calResult;
-                r[colorIndex]["10^X"] = Math.pow(10, calResult);
+                  cal_x(paramA, paramB, paramC, paramD, (255 - avColor))
+                    // ?.map((r) => r <= 4.5 && r >= 2.0 && r)
+                    // ?.filter((r) => r)[0] || 0;
+                r[colorIndex]["X"] = (255 - avColor);
+                r[colorIndex]["10^X"] = calResult;
                 setTableData([...tableData.map((t) => ({ ...t }))]);
                 return avColor;
               });

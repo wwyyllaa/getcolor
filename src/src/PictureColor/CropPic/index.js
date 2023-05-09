@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Upload } from "antd";
 import ImgCrop from "antd-img-crop";
 import cal_cubic_ik from "../../utils/calcu";
+import cal_x from "../../utils/cal_x";
 
 const getColor = (w, h, arr) => {
   var sumR = 0;
@@ -51,9 +52,9 @@ const App = ({ params, setParams, aspect = 1, shape = "round" }) => {
             var arr = ctx.getImageData(0, 0, img.width, img.height).data;
             const [avR, avG, avB] = getColor(img.width, img.height, arr);
             const calResult =
-              cal_cubic_ik([paramA, paramB, paramC, paramD - (255 - avB)])
-                ?.map((r) => r <= 4.5 && r >= 2.0 && r)
-                ?.filter((r) => r)[0] || 0;
+              cal_x(paramA, paramB, paramC, paramD, (255 - avB))
+            // ?.map((r) => r <= 4.5 && r >= 2.0 && r)
+            // ?.filter((r) => r)[0] || 0;
             setParams({ ...params, paramY: avB, paramResult: calResult });
             setData({
               avR,

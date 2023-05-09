@@ -25,7 +25,7 @@ export default () => {
           items={[
             {
               key: "1",
-              label: `单通道采集`,
+              label: `single sample`,
               children: [
                 {
                   key: "1_H2O2",
@@ -39,7 +39,7 @@ export default () => {
                   key: "1_Glucose",
                   label: (
                     <span>
-                      1_Glucose
+                      Glucose
                     </span>
                   ),
                 },
@@ -51,11 +51,19 @@ export default () => {
                     </span>
                   ),
                 },
+                {
+                  key: "1_Xanthine",
+                  label: (
+                    <span>
+                      Xanthine
+                    </span>
+                  ),
+                },
               ],
             },
             {
               key: "2",
-              label: `多通道采集`,
+              label: `multi-sample`,
               children: [
                 {
                   key: "2_H2O2",
@@ -69,7 +77,7 @@ export default () => {
                   key: "2_Glucose",
                   label: (
                     <span>
-                      1_Glucose
+                      Glucose
                     </span>
                   ),
                 },
@@ -78,6 +86,14 @@ export default () => {
                   label: (
                     <span>
                       Uric acid
+                    </span>
+                  ),
+                },
+                {
+                  key: "2_Xanthine",
+                  label: (
+                    <span>
+                      Xanthine
                     </span>
                   ),
                 },
@@ -97,9 +113,11 @@ export default () => {
         {key === "1_H2O2" && <PictureColor name={"1_H2O2"} {...defaultSingleProps} unit={'μM'} divideValue={1} />}
         {key === "1_Glucose" && <PictureColor name={"1_Glucose"}  {...defaultSingleProps} unit={'mM'} divideValue={1000} />}
         {key === "1_Uric acid" && <PictureColor name={"1_Uric acid"}  {...defaultSingleProps} unit={'μM'} divideValue={1} />}
+        {key === "1_Xanthine" && <PictureColor name={"1_Xanthine"}  {...defaultSingleProps} unit={'μM'} divideValue={1} />}
         {key === "2_H2O2" && <AllPictureColor name={"2_H2O2"}  {...defaultMultiProps} unit={'μM'} divideValue={1} />}
         {key === "2_Glucose" && <AllPictureColor name={"2_Glucose"}  {...defaultMultiProps} unit={'mM'} divideValue={1000} />}
         {key === "2_Uric acid" && <AllPictureColor name={"2_Uric acid"}  {...defaultMultiProps} unit={'μM'} divideValue={1}/>}
+        {key === "2_Xanthine" && <AllPictureColor name={"2_Xanthine"}  {...defaultMultiProps} unit={'μM'} divideValue={1}/>}
       </Content>
       <Footer
         style={{
