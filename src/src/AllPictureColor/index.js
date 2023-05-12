@@ -4,6 +4,7 @@ import { PlusOutlined, PauseOutlined } from "@ant-design/icons";
 import CropPic from "./CropPic";
 import columns from "./columns";
 import exportText from "../utils/exportText";
+import getCurrentTime from "../utils/gettime";
 const XNUM = 8;
 const YNUM = 12;
 function getTableDataRectStr(tableData, divideValue, divdeChar = "\t") {
@@ -16,18 +17,28 @@ function getTableDataRectStr(tableData, divideValue, divdeChar = "\t") {
       concentration: r[2]?.["10^X"] / divideValue || 0,
     };
   });
+  intensityStr = ['','A','B','C','D','E','F','G','H'].toString(divdeChar)
+  concentrationStr = ['','A','B','C','D','E','F','G','H'].toString(divdeChar)
+  intensityStr += "\n";
+  concentrationStr += "\n";
   for (let j = 0; j < YNUM; j++) {
-    for (let i = 0; i < XNUM; i++) {
-      const index = i + j * XNUM;
-      intensityStr += arrObj[index]["intensity"].toFixed(12);
-      concentrationStr += arrObj[index]["concentration"].toFixed(16);
-      if (i < XNUM - 1) {
-        intensityStr += divdeChar;
-        concentrationStr += divdeChar;
+    for (let i = 0; i < XNUM + 1; i++) {
+      if(i===0){
+        intensityStr = intensityStr+String(j+1)+divdeChar;
+        concentrationStr =  concentrationStr+String(j+1)+divdeChar;
+      }else{
+        const index = i-1 + j * XNUM;
+        intensityStr += arrObj[index]["intensity"].toFixed(12);
+        concentrationStr += arrObj[index]["concentration"].toFixed(16);
+        if (i < XNUM ) {
+          intensityStr += divdeChar;
+          concentrationStr += divdeChar;
+        }
       }
     }
     intensityStr += "\n";
     concentrationStr += "\n";
+    console.log(concentrationStr)
   }
   return [intensityStr, concentrationStr];
 }
@@ -56,17 +67,19 @@ const PictureColor = ({
   );
   const [intensityStrTxt, concentrationStrTxt] = getTableDataRectStr(
     tableData,
-    divideValue
+    divideValue,
+    "\t"
   );
   const [intensityStrCSV, concentrationStrCSV] = getTableDataRectStr(
     tableData,
     divideValue,
     ","
   );
+  const timeNow = getCurrentTime()
   const exportDataTxt =
-    "Intensity\n" + intensityStrTxt + "\nConcentration\n" + concentrationStrTxt;
+    "Intensity,"+timeNow+"\n"+ intensityStrTxt + "\nConcentration,"+timeNow+"\n" + concentrationStrTxt;
   const exportDataCSV =
-    "Intensity\n" + intensityStrCSV + "\nConcentration\n" + concentrationStrCSV;
+    "Intensity,"+timeNow+"\n"+ intensityStrCSV + "\nConcentration,"+timeNow+"\n" + concentrationStrCSV;
   return (
     <Space
       direction="vertical"
