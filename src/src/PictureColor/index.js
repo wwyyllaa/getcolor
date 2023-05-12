@@ -48,7 +48,7 @@ const PictureColor = ({
           >
             Intensity
           </Col>
-          <Col span={2} style={{ paddingTop: "6px" }}>
+          <Col span={5} style={{ paddingTop: "6px" }}>
             <PauseOutlined rotate={90} />
           </Col>
           <Col
@@ -73,7 +73,7 @@ const PictureColor = ({
           >
             Concentration
           </Col>
-          <Col span={2} style={{ paddingTop: "6px" }}>
+          <Col span={5} style={{ paddingTop: "6px" }}>
             <PauseOutlined rotate={90} />
           </Col>
           <Col

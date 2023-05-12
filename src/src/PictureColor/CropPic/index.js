@@ -23,7 +23,7 @@ const getColor = (w, h, arr) => {
   var avR = (sumR / w / h) * 4;
   var avG = (sumG / w / h) * 4;
   var avB = (sumB / w / h) * 4;
-  console.log(avR, avG, avB);
+  // console.log(avR, avG, avB);
   return [avR, avG, avB];
 };
 
@@ -33,7 +33,7 @@ const App = ({ params, setParams, aspect = 1, shape = "round" }) => {
   const { avR, avG, avB, result } = data;
   const { paramA, paramB, paramC, paramD, paramResult } = params;
   const onPreview = async (file) => {
-    console.log(params);
+    // console.log(params);
     let src = file.url;
     if (!src) {
       src = await new Promise((resolve) => {
@@ -97,14 +97,14 @@ const App = ({ params, setParams, aspect = 1, shape = "round" }) => {
           {fileList.length < 5 && "+ Upload"}
         </Upload>
       </ImgCrop>
-      <div>
+      {/* <div>
         {"avR: " +
           (avR || "0") +
           "   ,avG: " +
           (avG || "0") +
           "   ,avB: " +
           (avB || "0")}
-      </div>
+      </div> */}
       {/* <div>{"result: " + (result || "0")}</div> */}
     </>
   );

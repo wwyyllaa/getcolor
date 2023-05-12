@@ -38,7 +38,7 @@ function getTableDataRectStr(tableData, divideValue, divdeChar = "\t") {
     }
     intensityStr += "\n";
     concentrationStr += "\n";
-    console.log(concentrationStr)
+    // console.log(concentrationStr)
   }
   return [intensityStr, concentrationStr];
 }
